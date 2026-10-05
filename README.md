@@ -143,15 +143,15 @@ sequenceDiagram
 ## Production Verification & Terminal Evidence
 
 ### 1. Conceptual Architecture Blueprint
-![Auto-Start Architecture for EC2 Dev/Test Instances](AWS.jpg)
+![Auto-Start Architecture for EC2 Dev/Test Instances](Dev-Test/AWS.jpg)
 
 ### 2. Dual-Instance Synchronized Cron Configuration
 The Development instance prepares and dispatches `script.sh` via SCP to the Testing instance, then immediately initiates system shutdown. The Testing instance registers a validation watcher via `check_script.sh`:
-![Synchronized Cron Terminal Windows](1.png)
+![Synchronized Cron Terminal Windows](Dev-Test/1.png)
 
 ### 3. Automated Workload Completion & Power-Off
 Upon completion of the transfer and validation sequences, both virtual machines issue automated broadcast messages (`The system will power off now!`) and gracefully sever remote host SSH sessions:
-![Automated Power-Off Broadcast](2.png)
+![Automated Power-Off Broadcast](Dev-Test/2.png)
 
 ### 4. Immutable Execution Audit Log (`record.log`)
 Audit output verifying deterministic execution on the Testing node:
@@ -162,13 +162,13 @@ At 11:22:01 19 March 2025, Script found and executed.
 At 11:22:01 19 March 2025, script was deleted after execution.
 At 11:22:01 19 March 2025, shutting down Testing instance.
 ```
-![Execution Audit Trail](3.png)
+![Execution Audit Trail](Dev-Test/3.png)
 
 ---
 
 ## CloudFormation Infrastructure Specification
 
-The complete infrastructure is provisioned declaratively via [`Development-Testing.yaml`](Development-Testing.yaml) in region `ca-central-1` (Canada Central):
+The complete infrastructure is provisioned declaratively via [`Dev-Test/Development-Testing.yaml`](Dev-Test/Development-Testing.yaml) in region `ca-central-1` (Canada Central):
 
 | Logical Resource ID | AWS Resource Type | Configuration & Specification |
 | :--- | :--- | :--- |
@@ -227,7 +227,7 @@ fi
 ```bash
 aws cloudformation create-stack \
   --stack-name ec2-devtest-automated-transfer \
-  --template-body file://Development-Testing.yaml \
+  --template-body file://Dev-Test/Development-Testing.yaml \
   --capabilities CAPABILITY_NAMED_IAM \
   --region ca-central-1
 ```
